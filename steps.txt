@@ -1,0 +1,13 @@
+ Yes, mostly. Here's the flow:
+  
+     1. Create a regular account — Go to register.html, sign up with email/password
+     2. Make yourself admin — In Supabase dashboard → Table Editor → profiles table → find your profile    
+        → change role from student to admin
+     3. Upload papers — Login as any user → go to upload.html → select file, enter course code (e.g.     
+        "CSC 201"), fill details → submit                                                                  
+     4. Approve papers — Login as the admin user → go to admin.html → approve pending documents
+     5. Browse papers — Go to search.html to see approved documents
+  
+     One thing to note: the course code in the upload form (e.g. "CSC 201") matches against the courses    
+     table by the prefix ("CSC"). The seed data has codes like "CSC", "ACC", etc. So entering "CSC 201"    
+     will match the "CSC" course.
