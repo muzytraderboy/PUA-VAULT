@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - PUA Vault</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            milk: '#FDFFF5',
+                            green: '#2E7D32',
+                            darkgreen: '#1B5E20',
+                            accent: '#00C853',
+                            dark: '#0A1F0D',
+                            lightgreen: '#E8F5E9'
+                        }
+                    },
+                    fontFamily: { sans: ['Outfit', 'sans-serif'] }
+                }
+            }
+        }
+    </script>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans antialiased min-h-screen">
+    <nav class="fixed w-full z-50 bg-brand-dark border-b border-brand-green/20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center gap-3 cursor-pointer" onclick="window.location.href='index.html'">
+                    <div class="w-8 h-8 rounded-lg bg-brand-milk flex items-center justify-center text-brand-dark shadow-sm">
+                        <i class="ph-bold ph-vault text-lg"></i>
+                    </div>
+                    <span class="font-bold text-xl text-white">PUA Vault Panel</span>
+                </div>
+                <div class="flex items-center gap-4">
+                    <span class="text-sm text-gray-400 hidden sm:block" id="user-role-badge"></span>
+                    <button onclick="handleLogout()" class="text-gray-400 hover:text-white transition-colors text-sm flex items-center gap-1">
+                        <i class="ph-bold ph-sign-out"></i> Sign Out
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="pt-20 pb-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Tabs -->
+        <div class="flex gap-1 bg-white rounded-2xl p-1.5 shadow-sm border border-gray-100 mb-8 overflow-x-auto">
+            <button onclick="switchTab('overview')" class="tab-btn tab-active flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold transition-all whitespace-nowrap" data-tab="overview">
+                <i class="ph-bold ph-chart-bar"></i> Overview
+            </button>
+            <button onclick="switchTab('upload')" class="tab-btn flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold transition-all whitespace-nowrap" data-tab="upload">
+                <i class="ph-bold ph-upload-simple"></i> Upload
+            </button>
+            <button onclick="switchTab('documents')" class="tab-btn flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold transition-all whitespace-nowrap" data-tab="documents">
+                <i class="ph-bold ph-file-text"></i> Documents
+            </button>
+            <button onclick="switchTab('admins')" class="tab-btn flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold transition-all whitespace-nowrap" data-tab="admins">
+                <i class="ph-bold ph-users-three"></i> Admins
+            </button>
+            <button onclick="switchTab('discussions')" class="tab-btn flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold transition-all whitespace-nowrap" data-tab="discussions">
+                <i class="ph-bold ph-chats"></i> Discussions
+            </button>
+        </div>
+
+        <!-- Tab: Overview -->
+        <div id="tab-overview" class="tab-content">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 rounded-xl bg-brand-lightgreen text-brand-green flex items-center justify-center text-xl">
+                            <i class="ph-bold ph-file-text"></i>
+                        </div>
+                        <div>
+                            <div class="text-sm text-gray-500">Total Documents</div>
+                            <div class="text-3xl font-bold text-gray-900" id="stat-docs">-</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center text-xl">
+                            <i class="ph-bold ph-download-simple"></i>
+                        </div>
+                        <div>
+                            <div class="text-sm text-gray-500">Total Downloads</div>
+                            <div class="text-3xl font-bold text-gray-900" id="stat-downloads">-</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 rounded-xl bg-yellow-50 text-yellow-600 flex items-center justify-center text-xl">
+                            <i class="ph-bold ph-users-three"></i>
+                        </div>
+                        <div>
+                            <div class="text-sm text-gray-500">Admins</div>
+                            <div class="text-3xl font-bold text-gray-900" id="stat-admins">-</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                <div class="p-6 border-b border-gray-100">
+                    <h2 class="text-lg font-bold text-gray-900">Recent Uploads</h2>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left">
+                        <thead class="bg-gray-50 text-gray-500 text-sm border-b border-gray-100">
+                            <tr>
+                                <th class="px-6 py-4 font-medium">Title</th>
+                                <th class="px-6 py-4 font-medium">Course</th>
+                                <th class="px-6 py-4 font-medium">Downloads</th>
+                                <th class="px-6 py-4 font-medium">Date</th>
+                            </tr>
+                        </thead>
+                        <tbody id="recent-table-body" class="divide-y divide-gray-100"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab: Upload -->
+        <div id="tab-upload" class="tab-content hidden">
+            <div class="max-w-2xl mx-auto">
+                <div class="bg-white rounded-2xl p-8 shadow-sm border border-gray-100">
+                    <h2 class="text-xl font-bold text-gray-900 mb-6">Upload Document</h2>
+                    <form id="upload-form" class="space-y-5">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Document Title</label>
+                            <input type="text" name="title" required class="w-full px-4 py-3 border border-gray-200 rounded-xl bg-gray-50 focus:ring-2 focus:ring-brand-green focus:border-brand-green outline-none transition-all" placeholder="e.g., First Semester Exam">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Course Code</label>
+                            <input type="text" name="courseCode" required class="w-full px-4 py-3 border border-gray-200 rounded-xl bg-gray-50 focus:ring-2 focus:ring-brand-green focus:border-brand-green outline-none transition-all" placeholder="e.g., CSC 201">
+                            <p class="text-xs text-gray-400 mt-1">Enter course code prefix (e.g., CSC for CSC 201)</p>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Department</label>
+                            <select name="department" class="w-full px-4 py-3 border border-gray-200 rounded-xl bg-gray-50 focus:ring-2 focus:ring-brand-green focus:border-brand-green outline-none transition-all">
+                                <option value="">Select department...</option>
+                            </select>
+                            <p class="text-xs text-gray-400 mt-1">Required only for new course codes not yet in the system</p>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Course Title</label>
+                            <input type="text" name="courseTitle" class="w-full px-4 py-3 border border-gray-200 rounded-xl bg-gray-50 focus:ring-2 focus:ring-brand-green focus:border-brand-green outline-none transition-all" placeholder="e.g., General Studies">
+                            <p class="text-xs text-gray-400 mt-1">Required only for new course codes not yet in the system</p>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Document Type</label>
+                                <select name="docType" class="w-full px-4 py-3 border border-gray-200 rounded-xl bg-gray-50 focus:ring-2 focus:ring-brand-green focus:border-brand-green outline-none transition-all">
+                                    <option value="exam">Past Question</option>
+                                    <option value="project">Project</option>
+                                    <option value="material">Study Material</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Academic Session</label>
+                                <select name="year" class="w-full px-4 py-3 border border-gray-200 rounded-xl bg-gray-50 focus:ring-2 focus:ring-brand-green focus:border-brand-green outline-none transition-all">
+                                    <option value="2024/2025">2024/2025</option>
+                                    <option value="2023/2024">2023/2024</option>
+                                    <option value="2022/2023">2022/2023</option>
+                                    <option value="2021/2022">2021/2022</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Semester</label>
+                            <select name="semester" class="w-full px-4 py-3 border border-gray-200 rounded-xl bg-gray-50 focus:ring-2 focus:ring-brand-green focus:border-brand-green outline-none transition-all">
+                                <option value="">Not specified</option>
+                                <option value="First">First Semester</option>
+                                <option value="Second">Second Semester</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Document File</label>
+                            <div class="border-2 border-dashed border-gray-300 rounded-2xl p-8 text-center hover:border-brand-green transition-colors cursor-pointer" id="dropzone">
+                                <div class="w-12 h-12 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-3">
+                                    <i class="ph-bold ph-upload-simple text-2xl text-gray-400"></i>
+                                </div>
+                                <p class="text-gray-700 font-medium text-sm" id="dropzone-text">Click to select file</p>
+                                <p class="text-xs text-gray-400 mt-1">Max 10MB</p>
+                                <input type="file" accept=".pdf,.doc,.docx" class="hidden" id="file-input">
+                            </div>
+                        </div>
+                        <button type="submit" class="w-full bg-brand-green hover:bg-brand-darkgreen text-white py-3.5 rounded-xl font-semibold transition-all shadow-md flex items-center justify-center gap-2">
+                            <i class="ph-bold ph-upload-simple"></i> Upload Document
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab: Documents -->
+        <div id="tab-documents" class="tab-content hidden">
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                <div class="p-6 border-b border-gray-100 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                    <h2 class="text-lg font-bold text-gray-900">All Documents</h2>
+                    <div class="flex gap-2 w-full sm:w-auto">
+                        <input type="text" id="doc-search" placeholder="Search documents..." class="flex-1 sm:w-64 px-4 py-2 border border-gray-200 rounded-lg bg-gray-50 text-sm focus:ring-2 focus:ring-brand-green focus:border-brand-green outline-none">
+                        <button onclick="loadDocumentsTab()" class="bg-brand-green text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-brand-darkgreen transition-colors">
+                            <i class="ph-bold ph-magnifying-glass"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left">
+                        <thead class="bg-gray-50 text-gray-500 text-sm border-b border-gray-100">
+                            <tr>
+                                <th class="px-6 py-4 font-medium">Title</th>
+                                <th class="px-6 py-4 font-medium">Course</th>
+                                <th class="px-6 py-4 font-medium">Type</th>
+                                <th class="px-6 py-4 font-medium">Downloads</th>
+                                <th class="px-6 py-4 font-medium">Date</th>
+                                <th class="px-6 py-4 font-medium text-right">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="documents-table-body" class="divide-y divide-gray-100"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab: Admins -->
+        <div id="tab-admins" class="tab-content hidden">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                    <div class="p-6 border-b border-gray-100">
+                        <h2 class="text-lg font-bold text-gray-900">Registered Admins</h2>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left">
+                            <thead class="bg-gray-50 text-gray-500 text-sm border-b border-gray-100">
+                                <tr>
+                                    <th class="px-6 py-4 font-medium">Name</th>
+                                    <th class="px-6 py-4 font-medium">ID</th>
+                                    <th class="px-6 py-4 font-medium">Since</th>
+                                </tr>
+                            </thead>
+                            <tbody id="admins-table-body" class="divide-y divide-gray-100"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+                    <h2 class="text-lg font-bold text-gray-900 mb-6">Add Admin</h2>
+                    <form id="admin-form" class="space-y-4">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">First Name</label>
+                                <input type="text" name="firstName" required class="w-full px-4 py-3 border border-gray-200 rounded-xl bg-gray-50 focus:ring-2 focus:ring-brand-green focus:border-brand-green outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Last Name</label>
+                                <input type="text" name="lastName" required class="w-full px-4 py-3 border border-gray-200 rounded-xl bg-gray-50 focus:ring-2 focus:ring-brand-green focus:border-brand-green outline-none">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
+                            <input type="email" name="email" required class="w-full px-4 py-3 border border-gray-200 rounded-xl bg-gray-50 focus:ring-2 focus:ring-brand-green focus:border-brand-green outline-none" placeholder="admin@phoenixuniversity.edu.ng">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Temporary Password</label>
+                            <input type="password" name="password" required minlength="6" class="w-full px-4 py-3 border border-gray-200 rounded-xl bg-gray-50 focus:ring-2 focus:ring-brand-green focus:border-brand-green outline-none" placeholder="Min. 6 characters">
+                        </div>
+                        <button type="submit" class="w-full bg-brand-green hover:bg-brand-darkgreen text-white py-3 rounded-xl font-semibold transition-all shadow-md flex items-center justify-center gap-2">
+                            <i class="ph-bold ph-user-plus"></i> Add Admin
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- Tab: Discussions -->
+        <div id="tab-discussions" class="tab-content hidden">
+            <div class="flex flex-col lg:flex-row gap-8">
+                <!-- Threads List -->
+                <div class="flex-1 bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                    <div class="p-6 border-b border-gray-100 flex justify-between items-center">
+                        <h2 class="text-lg font-bold text-gray-900">Forum Threads</h2>
+                        <span class="text-sm text-gray-500" id="disc-thread-count"></span>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left">
+                            <thead class="bg-gray-50 text-gray-500 text-sm border-b border-gray-100">
+                                <tr>
+                                    <th class="px-6 py-4 font-medium">Course</th>
+                                    <th class="px-6 py-4 font-medium">Title</th>
+                                    <th class="px-6 py-4 font-medium">Author</th>
+                                    <th class="px-6 py-4 font-medium">Replies</th>
+                                    <th class="px-6 py-4 font-medium">Date</th>
+                                    <th class="px-6 py-4 font-medium text-right">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="disc-threads-body" class="divide-y divide-gray-100"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Side Panel -->
+                <div class="w-full lg:w-96 space-y-6">
+                    <!-- Thread Posts -->
+                    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                        <div class="p-4 border-b border-gray-100 flex justify-between items-center">
+                            <h3 class="font-bold text-gray-900 text-sm">Thread Posts</h3>
+                            <button onclick="closeThreadDetail()" class="text-gray-400 hover:text-gray-600 text-sm hidden" id="close-thread-btn"><i class="ph-bold ph-x"></i></button>
+                        </div>
+                        <div id="disc-posts-container" class="p-4 max-h-96 overflow-y-auto">
+                            <p class="text-gray-400 text-sm text-center py-8">Select a thread to view posts</p>
+                        </div>
+                    </div>
+
+                    <!-- Banned Identities -->
+                    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                        <div class="p-4 border-b border-gray-100 flex justify-between items-center">
+                            <h3 class="font-bold text-gray-900 text-sm">Banned Identities</h3>
+                            <span class="text-xs text-gray-500" id="banned-count"></span>
+                        </div>
+                        <div id="banned-list" class="p-4 max-h-60 overflow-y-auto">
+                            <p class="text-gray-400 text-sm text-center py-4">No banned identities</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="assets/js/supabaseClient.js"></script>
+    <script src="assets/js/auth.js"></script>
+    <script src="assets/js/admin.js"></script>
+</body>
+</html>

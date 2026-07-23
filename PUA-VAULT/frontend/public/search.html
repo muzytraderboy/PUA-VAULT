@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Browse Papers - PUA Vault</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            milk: '#FDFFF5',
+                            darkmilk: '#F0F4E3',
+                            lightgreen: '#E8F5E9',
+                            green: '#2E7D32',
+                            darkgreen: '#1B5E20',
+                            accent: '#00C853'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body class="bg-brand-milk text-gray-800 font-sans antialiased">
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 bg-brand-milk/80 backdrop-blur-md border-b border-brand-green/10 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <div class="flex-shrink-0 flex items-center gap-2 cursor-pointer" onclick="window.location.href='index.html'">
+                    <img src="assets/img/pua-logo.jpg" alt="PUA Logo" class="w-10 h-10 rounded-full object-cover shadow-lg">
+                    <span class="font-bold text-2xl tracking-tight text-brand-darkgreen">PUA Vault</span>
+                </div>
+                <div class="hidden md:flex space-x-8 items-center">
+                    <a href="search.html" class="text-brand-green font-semibold transition-colors border-b-2 border-brand-green pb-1">Browse Papers</a>
+                    <a href="forum.html" class="text-gray-600 hover:text-brand-green font-medium transition-colors">Forum</a>
+                    <a href="login.html" class="text-gray-600 hover:text-brand-green font-medium transition-colors">Staff</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="pt-28 pb-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row gap-8 min-h-screen">
+        
+        <!-- Sidebar Filters -->
+        <aside class="w-full md:w-64 flex-shrink-0">
+            <div class="bg-white rounded-2xl p-6 shadow-xl shadow-brand-green/5 border border-brand-green/10 sticky top-28">
+                <h2 class="text-lg font-bold text-brand-darkgreen mb-4 flex items-center gap-2">
+                    <i class="ph-bold ph-funnel"></i> Filters
+                </h2>
+                
+                <div class="space-y-6">
+                    <!-- Department Filter -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Department</label>
+                        <select id="filter-department" class="w-full bg-brand-milk border border-brand-green/20 text-gray-700 rounded-lg p-2.5 focus:ring-2 focus:ring-brand-green focus:border-brand-green outline-none transition-all">
+                            <option value="">All Faculties</option>
+                            <option value="ASM">Arts, Social and Management Sciences</option>
+                            <option value="CMP">Computing and Technology</option>
+                            <option value="NSA">Natural, Applied Sciences and Agriculture</option>
+                            <option value="LAW">Law</option>
+                        </select>
+                    </div>
+
+                    <!-- Level Filter -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Level</label>
+                        <select id="filter-level" class="w-full bg-brand-milk border border-brand-green/20 text-gray-700 rounded-lg p-2.5 focus:ring-2 focus:ring-brand-green focus:border-brand-green outline-none transition-all">
+                            <option value="">All Levels</option>
+                            <option value="100">100 Level</option>
+                            <option value="200">200 Level</option>
+                            <option value="300">300 Level</option>
+                            <option value="400">400 Level</option>
+                        </select>
+                    </div>
+                    
+                    <!-- Year Filter -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Year</label>
+                        <select id="filter-year" class="w-full bg-brand-milk border border-brand-green/20 text-gray-700 rounded-lg p-2.5 focus:ring-2 focus:ring-brand-green focus:border-brand-green outline-none transition-all">
+                            <option value="">Any Year</option>
+                            <option value="2024/2025">2024/2025</option>
+                            <option value="2023/2024">2023/2024</option>
+                            <option value="2022/2023">2022/2023</option>
+                            <option value="2021/2022">2021/2022</option>
+                        </select>
+                    </div>
+
+                    <!-- Semester Filter -->
+                    <div class="pt-4 border-t border-gray-100">
+                        <label class="block text-sm font-medium text-gray-700 mb-3">Semester</label>
+                        <div class="space-y-2">
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="checkbox" id="filter-semester-1" class="rounded text-brand-green focus:ring-brand-green w-4 h-4" value="First">
+                                <span class="text-gray-600 text-sm">First Semester</span>
+                            </label>
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="checkbox" id="filter-semester-2" class="rounded text-brand-green focus:ring-brand-green w-4 h-4" value="Second">
+                                <span class="text-gray-600 text-sm">Second Semester</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                
+                <button id="apply-filters-btn" class="w-full mt-8 bg-brand-lightgreen text-brand-darkgreen py-2 rounded-lg font-medium hover:bg-brand-green hover:text-white transition-colors border border-brand-green/20 hover:border-brand-green">
+                    Apply Filters
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Results Area -->
+        <div class="flex-1">
+            <!-- Search Input -->
+            <div class="bg-white rounded-2xl p-2 shadow-sm border border-brand-green/10 flex items-center mb-8 focus-within:ring-2 focus-within:ring-brand-green/50 transition-all">
+                <i class="ph ph-magnifying-glass text-xl text-gray-400 ml-4 mr-2"></i>
+                <input id="search-input" type="text" class="flex-1 py-3 bg-transparent outline-none text-gray-700 placeholder-gray-400" placeholder="Search for courses, codes, or keywords (e.g. MTH 101)...">
+                <button id="search-btn" class="bg-brand-green hover:bg-brand-darkgreen text-white px-6 py-3 rounded-xl font-medium transition-colors shadow-md hidden sm:block">
+                    Search
+                </button>
+            </div>
+
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-xl font-semibold text-gray-800">Showing <span id="results-count" class="text-brand-green">0</span> Results</h3>
+                <div class="flex items-center gap-2 text-sm text-gray-500">
+                    Sort by: 
+                    <select id="sort-select" class="bg-transparent font-medium text-gray-700 outline-none cursor-pointer">
+                        <option value="recent">Most Recent</option>
+                        <option value="downloads">Most Downloaded</option>
+                        <option value="rating">Highest Rated</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 xl:grid-cols-2 gap-6" id="results-grid"></div>
+            
+            <!-- Pagination -->
+            <div class="flex justify-center mt-12 gap-2" id="pagination"></div>
+            
+        </div>
+    </main>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="assets/js/supabaseClient.js"></script>
+    <script src="assets/js/search.js"></script>
+</body>
+</html>

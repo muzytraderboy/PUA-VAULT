@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PUA Vault - High Performance Student Portal</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            milk: '#FDFFF5',
+                            darkmilk: '#F0F4E3',
+                            lightgreen: '#E8F5E9',
+                            green: '#2E7D32',
+                            darkgreen: '#1B5E20',
+                            accent: '#00C853',
+                            dark: '#0A1F0D'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Outfit', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+
+<body
+    class="bg-[#FDFFF5] text-brand-dark font-sans antialiased selection:bg-brand-green selection:text-white bg-noise overflow-x-hidden flex flex-col min-h-screen">
+
+    <!-- Aurora Background -->
+    <div class="aurora-bg"></div>
+
+    <div class="flex-1">
+
+    <!-- Navigation -->
+    <nav class="fixed w-full top-4 z-50 px-4 transition-all duration-300 animate-reveal">
+        <div class="max-w-6xl mx-auto glass-panel rounded-full px-6 py-4 flex justify-between items-center">
+            <div class="flex-shrink-0 flex items-center gap-3 cursor-pointer"
+                onclick="window.location.href='index.html'">
+                <img src="assets/img/pua-logo.jpg" alt="PUA Logo" class="w-10 h-10 rounded-full object-cover shadow-lg">
+                <span class="font-extrabold text-xl tracking-tight text-brand-dark">PUA Vault</span>
+            </div>
+
+            <div
+                class="hidden md:flex space-x-8 items-center bg-white/40 px-6 py-2 rounded-full border border-white/60">
+                <a href="search.html"
+                    class="text-gray-700 hover:text-brand-green font-medium text-sm transition-colors">Browse Papers</a>
+                <a href="forum.html"
+                    class="text-gray-700 hover:text-brand-green font-medium text-sm transition-colors">Forum</a>
+            </div>
+
+            <div class="flex items-center gap-3">
+                <a href="login.html"
+                    class="text-gray-600 hover:text-brand-green font-medium text-sm transition-colors">
+                    Staff
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <main
+        class="relative pt-28 pb-16 lg:pt-32 lg:pb-20 min-h-[80vh] flex flex-col justify-center items-center z-10 bg-[url('assets/img/pua-gate.jpg')] bg-cover bg-center bg-no-repeat bg-fixed">
+
+        <!-- Dark Overlay -->
+        <div class="absolute inset-0 bg-[#0A1F0D]/85 z-0"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative w-full z-10">
+
+            <!-- Floating UI Elements (Parallax effect) -->
+            <div
+                class="hidden lg:block absolute top-0 left-10 glass-panel border border-white/20 p-4 rounded-2xl animate-float delay-100 shadow-2xl w-64 rotate-[-3deg] bg-white/10 text-white">
+                <div class="flex gap-3 items-center mb-3">
+                    <div
+                        class="w-8 h-8 rounded-full bg-brand-accent/20 flex items-center justify-center text-brand-accent">
+                        <i class="ph-bold ph-file-pdf"></i>
+                    </div>
+                    <div>
+                        <div class="text-xs font-bold text-white">MTH 101 Exam</div>
+                        <div class="text-[10px] text-gray-300">Just uploaded</div>
+                    </div>
+                </div>
+                <div class="h-1.5 w-full bg-white/20 rounded-full overflow-hidden">
+                    <div class="h-full bg-brand-accent w-3/4"></div>
+                </div>
+            </div>
+
+            <div
+                class="hidden lg:block absolute bottom-10 right-10 glass-dark border border-white/20 p-5 rounded-2xl animate-float delay-300 shadow-2xl w-56 rotate-[4deg]">
+                <div class="text-gray-300 text-sm font-medium mb-1">Downloads Today</div>
+                <div class="text-3xl font-extrabold text-brand-accent">1,248</div>
+                <div class="mt-3 flex -space-x-2">
+                    <div class="w-7 h-7 rounded-full bg-gray-600 border-2 border-[#0A1F0D]"></div>
+                    <div class="w-7 h-7 rounded-full bg-gray-500 border-2 border-[#0A1F0D]"></div>
+                    <div class="w-7 h-7 rounded-full bg-gray-400 border-2 border-[#0A1F0D]"></div>
+                    <div
+                        class="w-7 h-7 rounded-full bg-brand-accent text-[#0A1F0D] border-2 border-[#0A1F0D] text-[10px] flex items-center justify-center font-bold">
+                        +99</div>
+                </div>
+            </div>
+
+            <!-- Central Content -->
+            <div class="text-center max-w-4xl mx-auto">
+                <div
+                    class="inline-flex items-center gap-2 px-5 py-2 rounded-full glass-panel border border-white/20 text-white font-medium text-xs mb-8 animate-reveal bg-white/10">
+                    <span class="w-2 h-2 rounded-full bg-brand-accent" style="animation: pulse-glow 2s infinite"></span>
+                    Phoenix University Agwada 2025/2026
+                </div>
+
+                <h1
+                    class="text-6xl md:text-[5rem] lg:text-[6.5rem] font-extrabold tracking-tight leading-[1.05] text-white mb-6 animate-reveal delay-100 text-balance drop-shadow-2xl">
+                    Master your exams <br class="hidden md:block">
+                    with <span class="text-brand-accent">precision.</span>
+                </h1>
+
+                <p
+                    class="mt-6 text-xl md:text-2xl text-gray-300 max-w-2xl mx-auto mb-12 animate-reveal delay-200 font-light leading-relaxed">
+                    The premium repository for PUA past papers, projects, and study materials. Built for the modern
+                    student.
+                </p>
+
+                <!-- 2026 Search Component -->
+                <div class="max-w-2xl mx-auto relative animate-reveal delay-300 z-30">
+                    <div
+                        class="absolute -inset-1 bg-gradient-to-r from-brand-green to-brand-accent rounded-full blur opacity-40 group-hover:opacity-70 transition duration-1000 group-hover:duration-200">
+                    </div>
+                    <div
+                        class="relative glass-panel bg-white/10 p-2.5 rounded-full flex items-center shadow-2xl focus-within:bg-white/20 transition-all border border-white/30">
+                        <div class="pl-5 pr-3 text-brand-accent">
+                            <i class="ph-bold ph-magnifying-glass text-xl"></i>
+                        </div>
+                        <input type="text"
+                            class="flex-1 py-3 bg-transparent outline-none text-lg text-white placeholder-gray-300 font-medium"
+                            placeholder="Search MTH 101, Computer Science...">
+                        <button onclick="window.location.href='search.html'"
+                            class="bg-brand-accent hover:bg-brand-green text-brand-dark px-8 py-3.5 rounded-full font-bold transition-all shadow-lg transform hover:scale-[1.02]">
+                            Explore
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Bento Grid Stats Section -->
+    <section class="relative z-20 pb-20 pt-16 px-4 max-w-7xl mx-auto">
+        <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 auto-rows-[200px]">
+
+            <!-- Large Feature Box -->
+            <div
+                class="md:col-span-2 lg:col-span-2 bg-brand-dark text-white rounded-[2rem] p-8 flex flex-col justify-between shadow-2xl relative overflow-hidden group">
+                <div
+                    class="absolute top-0 right-0 w-64 h-64 bg-brand-green/30 blur-3xl rounded-full transform translate-x-1/2 -translate-y-1/2 group-hover:bg-brand-accent/40 transition-colors duration-700">
+                </div>
+                <div class="relative z-10">
+                    <div
+                        class="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center mb-4 border border-white/10 backdrop-blur-md">
+                        <i class="ph-fill ph-books text-2xl text-brand-accent"></i>
+                    </div>
+                    <h3 class="text-3xl font-bold tracking-tight mb-2">2,500+ Documents</h3>
+                    <p class="text-gray-400 font-light">Continuously updated archive of past papers across all
+                        faculties.</p>
+                </div>
+            </div>
+
+            <!-- Stat Box 1 -->
+            <div
+                class="glass-panel rounded-[2rem] p-8 flex flex-col justify-center items-center text-center shadow-lg border border-brand-green/10">
+                <div class="text-5xl font-extrabold text-gradient mb-2">4</div>
+                <div class="text-sm font-semibold text-gray-500 uppercase tracking-widest">Faculties</div>
+            </div>
+
+            <!-- Stat Box 2 -->
+            <div
+                class="glass-panel rounded-[2rem] p-8 flex flex-col justify-center items-center text-center shadow-lg border border-brand-green/10">
+                <div class="text-5xl font-extrabold text-gradient mb-2">24/7</div>
+                <div class="text-sm font-semibold text-gray-500 uppercase tracking-widest">Access</div>
+            </div>
+
+            <!-- Download Action Box -->
+            <div
+                class="md:col-span-3 lg:col-span-4 bg-brand-green text-brand-milk rounded-[2rem] p-8 md:p-12 flex flex-col md:flex-row justify-between items-center shadow-2xl shadow-brand-green/20 mt-4">
+                <div class="mb-6 md:mb-0 max-w-lg">
+                    <h2 class="text-3xl md:text-4xl font-bold tracking-tight mb-3">Ready to ace your next exam?</h2>
+                    <p class="text-brand-lightgreen font-light text-lg">Browse 2,500+ past papers, projects, and study materials — all free.</p>
+                </div>
+                <a href="search.html"
+                    class="bg-brand-milk text-brand-dark hover:bg-white px-8 py-4 rounded-full font-bold text-lg transition-all shadow-xl hover:shadow-2xl hover:-translate-y-1 whitespace-nowrap">
+                    Start Browsing
+                </a>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section class="relative z-20 py-24 px-4 bg-white border-t border-brand-green/10 mt-10">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-extrabold text-brand-dark tracking-tight">How PUA Vault Works</h2>
+                <p class="text-gray-500 mt-4 text-xl font-light">A streamlined process to get the materials you need.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Step 1 -->
+                <div
+                    class="bg-brand-milk p-10 rounded-[2rem] border border-brand-green/10 hover:shadow-2xl transition-all duration-300 group">
+                    <div
+                        class="w-16 h-16 rounded-2xl bg-brand-green text-white flex items-center justify-center text-3xl mb-6 shadow-lg group-hover:scale-110 transition-transform">
+                        <i class="ph-bold ph-magnifying-glass"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-brand-dark mb-3">1. Search & Filter</h3>
+                    <p class="text-gray-600 leading-relaxed font-light">Easily browse through the 4 official faculties
+                        and find exactly the course or past paper you are looking for.</p>
+                </div>
+
+                <!-- Step 2 -->
+                <div
+                    class="bg-brand-milk p-10 rounded-[2rem] border border-brand-green/10 hover:shadow-2xl transition-all duration-300 group">
+                    <div
+                        class="w-16 h-16 rounded-2xl bg-brand-dark text-brand-accent flex items-center justify-center text-3xl mb-6 shadow-lg group-hover:scale-110 transition-transform">
+                        <i class="ph-bold ph-download-simple"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-brand-dark mb-3">2. Download Instantly</h3>
+                    <p class="text-gray-600 leading-relaxed font-light">No paywalls, no waiting. Download PDF copies of
+                        exams, CA tests, and project materials straight to your device.</p>
+                </div>
+
+                <!-- Step 3 -->
+                <div
+                    class="bg-brand-milk p-10 rounded-[2rem] border border-brand-green/10 hover:shadow-2xl transition-all duration-300 group">
+                    <div
+                        class="w-16 h-16 rounded-2xl bg-brand-accent text-brand-dark flex items-center justify-center text-3xl mb-6 shadow-lg group-hover:scale-110 transition-transform">
+                        <i class="ph-bold ph-graduation-cap"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-brand-dark mb-3">3. Faculty-Driven</h3>
+                    <p class="text-gray-600 leading-relaxed font-light">Papers are uploaded and curated by platform administrators. Always accurate, always relevant.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-brand-dark pt-20 pb-10 border-t border-brand-green/20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
+
+                <div class="col-span-1 md:col-span-2">
+                    <div class="flex items-center gap-3 mb-6">
+                        <img src="assets/img/pua-logo.jpg" alt="PUA Logo" class="w-10 h-10 rounded-full object-cover shadow-lg">
+                        <span class="font-extrabold text-2xl tracking-tight text-white">PUA Vault</span>
+                    </div>
+                    <p class="text-gray-400 max-w-sm font-light leading-relaxed mb-6">
+                        The official student-driven document repository for Phoenix University Agwada. Empowering
+                        students with academic resources.
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="#"
+                            class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-white hover:bg-brand-accent hover:text-brand-dark transition-colors"><i
+                                class="ph-bold ph-twitter-logo"></i></a>
+                        <a href="#"
+                            class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-white hover:bg-brand-accent hover:text-brand-dark transition-colors"><i
+                                class="ph-bold ph-instagram-logo"></i></a>
+                        <a href="#"
+                            class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-white hover:bg-brand-accent hover:text-brand-dark transition-colors"><i
+                                class="ph-bold ph-facebook-logo"></i></a>
+                    </div>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-bold mb-6 tracking-wide">Quick Links</h4>
+                    <ul class="space-y-4">
+                        <li><a href="search.html"
+                                class="text-gray-400 hover:text-brand-accent transition-colors font-light">Browse
+                                Papers</a></li>
+                        <li><a href="forum.html" class="text-gray-400 hover:text-brand-accent transition-colors font-light">Forum</a></li>
+                        </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-bold mb-6 tracking-wide">Contact</h4>
+                    <ul class="space-y-4">
+                        <li class="flex items-center gap-3 text-gray-400 font-light"><i
+                                class="ph-bold ph-envelope-simple text-brand-accent"></i> info@phoenixuniversity.edu.ng
+                        </li>
+                        <li class="flex items-center gap-3 text-gray-400 font-light"><i
+                                class="ph-bold ph-phone text-brand-accent"></i> +234-812-2902-806</li>
+                        <li class="flex items-start gap-3 text-gray-400 font-light"><i
+                                class="ph-bold ph-map-pin text-brand-accent mt-1"></i> Agwada, Nasarawa
+                            State,<br>Nigeria</li>
+                    </ul>
+                </div>
+
+            </div>
+
+            <div class="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-gray-500 text-sm mb-4 md:mb-0 font-light">
+                    &copy;
+                    <script>document.write(new Date().getFullYear())</script> Phoenix University Agwada. All rights
+                    reserved.
+                </p>
+                <div class="flex space-x-6 text-sm">
+                    <a href="privacy.html" class="text-gray-500 hover:text-white transition-colors font-light">Privacy Policy</a>
+                    <a href="terms.html" class="text-gray-500 hover:text-white transition-colors font-light">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="assets/js/supabaseClient.js"></script>
+    <script src="assets/js/auth.js"></script>
+</body>
+
+</html>

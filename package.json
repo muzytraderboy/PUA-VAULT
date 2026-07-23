@@ -6,14 +6,7 @@
     "start": "cd frontend/public && python -m http.server 8000",
     "dev": "cd frontend/public && python -m http.server 8000"
   },
-  "keywords": [
-    "past-questions",
-    "phoenix-university",
-    "supabase"
-  ],
+  "keywords": ["past-questions", "phoenix-university", "supabase"],
   "author": "",
-  "license": "MIT",
-  "dependencies": {
-    "@supabase/supabase-js": "^2.110.8"
-  }
+  "license": "MIT"
 }

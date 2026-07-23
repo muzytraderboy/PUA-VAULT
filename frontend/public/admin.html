@@ -63,9 +63,6 @@
             <button onclick="switchTab('admins')" class="tab-btn flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold transition-all whitespace-nowrap" data-tab="admins">
                 <i class="ph-bold ph-users-three"></i> Admins
             </button>
-            <button onclick="switchTab('discussions')" class="tab-btn flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold transition-all whitespace-nowrap" data-tab="discussions">
-                <i class="ph-bold ph-chats"></i> Discussions
-            </button>
         </div>
 
         <!-- Tab: Overview -->
@@ -180,14 +177,14 @@
                             </select>
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Document File</label>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">PDF File</label>
                             <div class="border-2 border-dashed border-gray-300 rounded-2xl p-8 text-center hover:border-brand-green transition-colors cursor-pointer" id="dropzone">
                                 <div class="w-12 h-12 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-3">
                                     <i class="ph-bold ph-upload-simple text-2xl text-gray-400"></i>
                                 </div>
-                                <p class="text-gray-700 font-medium text-sm" id="dropzone-text">Click to select file</p>
+                                <p class="text-gray-700 font-medium text-sm" id="dropzone-text">Click to select PDF</p>
                                 <p class="text-xs text-gray-400 mt-1">Max 10MB</p>
-                                <input type="file" accept=".pdf,.doc,.docx" class="hidden" id="file-input">
+                                <input type="file" accept=".pdf" class="hidden" id="file-input">
                             </div>
                         </div>
                         <button type="submit" class="w-full bg-brand-green hover:bg-brand-darkgreen text-white py-3.5 rounded-xl font-semibold transition-all shadow-md flex items-center justify-center gap-2">
@@ -274,58 +271,6 @@
                             <i class="ph-bold ph-user-plus"></i> Add Admin
                         </button>
                     </form>
-                </div>
-            </div>
-        </div>
-        <!-- Tab: Discussions -->
-        <div id="tab-discussions" class="tab-content hidden">
-            <div class="flex flex-col lg:flex-row gap-8">
-                <!-- Threads List -->
-                <div class="flex-1 bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-                    <div class="p-6 border-b border-gray-100 flex justify-between items-center">
-                        <h2 class="text-lg font-bold text-gray-900">Forum Threads</h2>
-                        <span class="text-sm text-gray-500" id="disc-thread-count"></span>
-                    </div>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left">
-                            <thead class="bg-gray-50 text-gray-500 text-sm border-b border-gray-100">
-                                <tr>
-                                    <th class="px-6 py-4 font-medium">Course</th>
-                                    <th class="px-6 py-4 font-medium">Title</th>
-                                    <th class="px-6 py-4 font-medium">Author</th>
-                                    <th class="px-6 py-4 font-medium">Replies</th>
-                                    <th class="px-6 py-4 font-medium">Date</th>
-                                    <th class="px-6 py-4 font-medium text-right">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody id="disc-threads-body" class="divide-y divide-gray-100"></tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <!-- Side Panel -->
-                <div class="w-full lg:w-96 space-y-6">
-                    <!-- Thread Posts -->
-                    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-                        <div class="p-4 border-b border-gray-100 flex justify-between items-center">
-                            <h3 class="font-bold text-gray-900 text-sm">Thread Posts</h3>
-                            <button onclick="closeThreadDetail()" class="text-gray-400 hover:text-gray-600 text-sm hidden" id="close-thread-btn"><i class="ph-bold ph-x"></i></button>
-                        </div>
-                        <div id="disc-posts-container" class="p-4 max-h-96 overflow-y-auto">
-                            <p class="text-gray-400 text-sm text-center py-8">Select a thread to view posts</p>
-                        </div>
-                    </div>
-
-                    <!-- Banned Identities -->
-                    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-                        <div class="p-4 border-b border-gray-100 flex justify-between items-center">
-                            <h3 class="font-bold text-gray-900 text-sm">Banned Identities</h3>
-                            <span class="text-xs text-gray-500" id="banned-count"></span>
-                        </div>
-                        <div id="banned-list" class="p-4 max-h-60 overflow-y-auto">
-                            <p class="text-gray-400 text-sm text-center py-4">No banned identities</p>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
