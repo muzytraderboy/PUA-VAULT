@@ -112,10 +112,7 @@ function renderCatalogView(container, threads) {
     container.innerHTML = threads.map(t => `
         <div class="thread-card bg-white rounded-xl border border-brand-green/10 hover:border-brand-green/30 hover:shadow-lg overflow-hidden cursor-pointer" onclick="openThread('${t.id}')">
             ${t.image_url
-                ? `<div class="w-full h-40 overflow-hidden bg-gray-100">
-                       <img src="${t.image_url}" alt="" class="w-full h-full object-cover thread-image" loading="lazy"
-                            onerror="this.parentElement.innerHTML='<div class=\\'w-full h-full flex items-center justify-center text-gray-300\\'><i class=\\'ph-bold ph-image text-3xl\\'></i></div>'">
-                   </div>`
+                ? renderCatalogThumbnail(t.image_url, t.file_type)
                 : `<div class="w-full h-40 bg-gradient-to-br from-brand-lightgreen to-brand-milk flex items-center justify-center">
                        <i class="ph-bold ph-chats-circle text-4xl text-brand-green/30"></i>
                    </div>`
@@ -143,10 +140,7 @@ function renderListView(container, threads) {
     container.innerHTML = threads.map(t => `
         <div class="thread-card bg-white rounded-xl border border-brand-green/10 hover:border-brand-green/30 hover:shadow-md transition-all cursor-pointer p-4 flex items-center gap-4" onclick="openThread('${t.id}')">
             ${t.image_url
-                ? `<div class="w-16 h-16 rounded-lg overflow-hidden bg-gray-100 shrink-0">
-                       <img src="${t.image_url}" alt="" class="w-full h-full object-cover" loading="lazy"
-                            onerror="this.parentElement.innerHTML='<div class=\\'w-full h-full flex items-center justify-center text-gray-300\\'><i class=\\'ph-bold ph-image\\'></i></div>'">
-                   </div>`
+                ? renderListThumbnail(t.image_url, t.file_type)
                 : `<div class="w-16 h-16 rounded-lg bg-gradient-to-br from-brand-lightgreen to-brand-milk flex items-center justify-center shrink-0">
                        <i class="ph-bold ph-chats-circle text-xl text-brand-green/30"></i>
                    </div>`
@@ -206,7 +200,7 @@ async function openThread(threadId) {
 }
 
 function renderThreadDetail(thread, posts) {
-    const hasImage = thread.image_url;
+    const hasFile = thread.image_url;
     return `
         <div class="bg-white rounded-2xl border border-brand-green/10 shadow-sm overflow-hidden">
             <!-- Thread Header -->
@@ -235,13 +229,7 @@ function renderThreadDetail(thread, posts) {
 
             <!-- OP Post -->
             <div class="p-5 sm:p-6 border-b border-gray-100">
-                ${hasImage ? `
-                <div class="mb-4">
-                    <img src="${thread.image_url}" alt="Thread image" class="op-image w-full cursor-pointer" loading="lazy"
-                        onclick="window.open('${thread.image_url}', '_blank')"
-                        onerror="this.outerHTML='<div class=\\'p-4 bg-red-50 rounded-lg text-red-400 text-sm\\'><i class=\\'ph-bold ph-image-broken mr-1\\'></i>Image failed to load</div>'">
-                </div>
-                ` : ''}
+                ${hasFile ? renderFileAttachment(thread.image_url, thread.file_type) : ''}
                 <p class="text-gray-700 text-sm leading-relaxed whitespace-pre-wrap">${escapeHtml(thread.content)}</p>
             </div>
 
@@ -258,13 +246,7 @@ function renderThreadDetail(thread, posts) {
                                 <span class="text-gray-300">#${p.id.substring(0, 8)}</span>
                                 ${p.detected_course_code ? `<span class="course-tag text-xs px-1.5 py-0.5 rounded bg-green-50 text-brand-accent border border-brand-accent/20">${escapeHtml(p.detected_course_code)}</span>` : ''}
                             </div>
-                            ${p.image_url ? `
-                            <div class="mb-3">
-                                <img src="${p.image_url}" alt="Reply image" class="reply-image max-h-48" loading="lazy"
-                                    onclick="window.open('${p.image_url}', '_blank')"
-                                    onerror="this.outerHTML='<span class=\\'text-red-400 text-xs\\'>Image failed to load</span>'">
-                            </div>
-                            ` : ''}
+                            ${p.image_url ? renderFileAttachment(p.image_url, p.file_type, true) : ''}
                             <p class="text-gray-700 text-sm leading-relaxed whitespace-pre-wrap">${escapeHtml(p.content)}</p>
                         </div>
                     `).join('')
@@ -282,7 +264,7 @@ function renderThreadDetail(thread, posts) {
                             <button type="button" class="reply-image-btn px-3 py-2 border border-gray-200 rounded-lg text-sm text-gray-500 hover:text-brand-green hover:border-brand-green transition-colors flex items-center gap-1.5 bg-white">
                                 <i class="ph-bold ph-image"></i> Image
                             </button>
-                            <input type="file" accept="image/jpeg,image/png,image/gif,image/webp" class="reply-image-input hidden">
+                            <input type="file" accept="image/*,.pdf,.doc,.docx,.txt" class="reply-image-input hidden">
                         </div>
                         <div class="reply-image-preview hidden relative">
                             <img class="max-h-16 rounded-lg border border-gray-200" alt="Preview">
@@ -317,38 +299,44 @@ let threadOcrCode = null;
 function handleThreadImageSelect(file) {
     if (!file) return;
     threadImageFile = file;
-    const reader = new FileReader();
-    reader.onload = async (e) => {
-        const dataUrl = e.target.result;
-        document.getElementById('thread-image-placeholder').classList.add('hidden');
-        const preview = document.getElementById('thread-image-preview');
-        preview.classList.remove('hidden');
-        document.getElementById('thread-image-img').src = dataUrl;
-        document.getElementById('thread-ocr-status').innerHTML = '<span class="text-xs text-brand-green"><i class="ph-bold ph-spinner animate-spin"></i> Scanning image for course code...</span>';
+    document.getElementById('thread-image-placeholder').classList.add('hidden');
+    const preview = document.getElementById('thread-image-preview');
+    preview.classList.remove('hidden');
+    const status = document.getElementById('thread-ocr-status');
 
-        try {
-            const code = await scanImageForCourseCode(dataUrl);
-            if (code) {
-                threadOcrCode = code;
-                document.getElementById('thread-ocr-status').innerHTML = `<span class="text-xs text-brand-green"><i class="ph-bold ph-scan"></i> Detected: <strong>${code}</strong></span>`;
-                const detectedDiv = document.getElementById('thread-detected-course');
-                detectedDiv.classList.remove('hidden');
-                document.getElementById('thread-detected-code-input').value = code;
-                const select = document.getElementById('thread-course-code');
-                const existingOpt = Array.from(select.options).find(opt => opt.value === code);
-                if (existingOpt) {
-                    select.value = code;
+    if (isImageMime(file.type)) {
+        const reader = new FileReader();
+        reader.onload = async (e) => {
+            const dataUrl = e.target.result;
+            document.getElementById('thread-image-img').src = dataUrl;
+            document.getElementById('thread-image-img').classList.remove('hidden');
+            status.innerHTML = '<span class="text-xs text-brand-green"><i class="ph-bold ph-spinner animate-spin"></i> Scanning image for course code...</span>';
+
+            try {
+                const code = await scanImageForCourseCode(dataUrl);
+                if (code) {
+                    threadOcrCode = code;
+                    status.innerHTML = `<span class="text-xs text-brand-green"><i class="ph-bold ph-scan"></i> Detected: <strong>${code}</strong></span>`;
+                    const detectedDiv = document.getElementById('thread-detected-course');
+                    detectedDiv.classList.remove('hidden');
+                    document.getElementById('thread-detected-code-input').value = code;
+                    const select = document.getElementById('thread-course-code');
+                    const existingOpt = Array.from(select.options).find(opt => opt.value === code);
+                    if (existingOpt) select.value = code;
+                } else {
+                    threadOcrCode = null;
+                    status.innerHTML = '<span class="text-xs text-gray-400">No course code detected in image</span>';
                 }
-            } else {
-                threadOcrCode = null;
-                document.getElementById('thread-ocr-status').innerHTML = '<span class="text-xs text-gray-400">No course code detected in image</span>';
+            } catch (err) {
+                console.error('OCR error:', err);
+                status.innerHTML = '<span class="text-xs text-red-400">OCR failed</span>';
             }
-        } catch (err) {
-            console.error('OCR error:', err);
-            document.getElementById('thread-ocr-status').innerHTML = '<span class="text-xs text-red-400">OCR failed</span>';
-        }
-    };
-    reader.readAsDataURL(file);
+        };
+        reader.readAsDataURL(file);
+    } else {
+        document.getElementById('thread-image-img').classList.add('hidden');
+        status.innerHTML = `<span class="text-xs text-gray-500"><i class="${getFileIcon(file.type)} text-lg mr-1"></i>${escapeHtml(file.name)}</span>`;
+    }
 }
 
 function clearThreadImage() {
@@ -380,6 +368,27 @@ async function scanImageForCourseCode(dataUrl) {
 
     const unique = [...new Set(codes)];
     return unique.length > 0 ? unique[0] : null;
+}
+
+function getFileIcon(fileType, url) {
+    if (!fileType && !url) return 'ph-file';
+    const ext = (fileType || url || '').split('.').pop().toLowerCase();
+    if (ext === 'pdf' || fileType === 'application/pdf') return 'ph-file-pdf';
+    if (['doc', 'docx'].includes(ext) || fileType?.includes('word')) return 'ph-file-doc';
+    if (ext === 'txt' || fileType === 'text/plain') return 'ph-file-text';
+    if (['xls', 'xlsx'].includes(ext)) return 'ph-file-xls';
+    if (['zip', 'rar', '7z'].includes(ext)) return 'ph-file-archive';
+    if (fileType?.startsWith('image/')) return 'ph-file-image';
+    return 'ph-file';
+}
+
+function getFileName(url) {
+    if (!url) return '';
+    return decodeURIComponent(url.split('/').pop());
+}
+
+function isImageMime(fileType) {
+    return fileType && fileType.startsWith('image/');
 }
 
 async function uploadForumImage(file, bucketPath) {
@@ -490,6 +499,7 @@ async function handleNewThread(e) {
             image_url: imageUrl,
             image_width: imgWidth,
             image_height: imgHeight,
+            file_type: threadImageFile?.type || null,
             detected_course_code: detectedCode
         });
 
@@ -547,12 +557,14 @@ document.addEventListener('submit', async (e) => {
             const fileName = `replies/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
             imageUrl = await uploadForumImage(replyImageFile, fileName);
 
-            const reader = new FileReader();
-            const dataUrl = await new Promise(resolve => {
-                reader.onload = () => resolve(reader.result);
-                reader.readAsDataURL(replyImageFile);
-            });
-            detectedCode = await scanImageForCourseCode(dataUrl);
+            if (isImageMime(replyImageFile.type)) {
+                const reader = new FileReader();
+                const dataUrl = await new Promise(resolve => {
+                    reader.onload = () => resolve(reader.result);
+                    reader.readAsDataURL(replyImageFile);
+                });
+                detectedCode = await scanImageForCourseCode(dataUrl);
+            }
         }
 
         const { error } = await client.from('discussion_posts').insert({
@@ -561,6 +573,7 @@ document.addEventListener('submit', async (e) => {
             author_identity: identity,
             author_name: 'Anonymous',
             image_url: imageUrl,
+            file_type: replyImageFile?.type || null,
             detected_course_code: detectedCode
         });
 
@@ -597,24 +610,32 @@ document.addEventListener('change', (e) => {
     const img = preview.querySelector('img');
     const tag = preview.querySelector('.reply-ocr-tag');
 
-    const reader = new FileReader();
-    reader.onload = async (ev) => {
-        img.src = ev.target.result;
-        preview.classList.remove('hidden');
+    preview.classList.remove('hidden');
 
-        try {
-            const code = await scanImageForCourseCode(ev.target.result);
-            if (code) {
-                tag.textContent = `OCR: ${code}`;
-                tag.classList.remove('hidden');
-            } else {
+    if (isImageMime(file.type)) {
+        const reader = new FileReader();
+        reader.onload = async (ev) => {
+            img.src = ev.target.result;
+            img.classList.remove('hidden');
+            try {
+                const code = await scanImageForCourseCode(ev.target.result);
+                if (code) {
+                    tag.textContent = `OCR: ${code}`;
+                    tag.classList.remove('hidden');
+                } else {
+                    tag.classList.add('hidden');
+                }
+            } catch {
                 tag.classList.add('hidden');
             }
-        } catch {
-            tag.classList.add('hidden');
-        }
-    };
-    reader.readAsDataURL(file);
+        };
+        reader.readAsDataURL(file);
+    } else {
+        img.classList.add('hidden');
+        tag.textContent = file.name;
+        tag.classList.remove('hidden');
+        tag.className = 'text-xs text-gray-500 ml-2';
+    }
 
     const clearBtn = preview.querySelector('.clear-reply-image');
     if (clearBtn) {
@@ -624,6 +645,59 @@ document.addEventListener('change', (e) => {
         };
     }
 });
+
+function renderFileAttachment(url, fileType, isReply = false) {
+    if (!url) return '';
+    const isImage = !fileType || isImageMime(fileType);
+    if (isImage) {
+        const imgClass = isReply ? 'reply-image max-h-48' : 'op-image w-full';
+        return `
+        <div class="mb-4">
+            <img src="${url}" alt="" class="${imgClass} cursor-pointer" loading="lazy"
+                onclick="window.open('${url}', '_blank')"
+                onerror="this.outerHTML='<div class=\\'p-4 bg-red-50 rounded-lg text-red-400 text-sm\\'><i class=\\'ph-bold ph-image-broken mr-1\\'></i>Image failed to load</div>'">
+        </div>`;
+    }
+    const icon = getFileIcon(fileType, url);
+    const name = getFileName(url);
+    return `
+    <div class="mb-4">
+        <a href="${url}" target="_blank" class="flex items-center gap-3 p-4 bg-gray-50 rounded-xl border border-gray-200 hover:border-brand-green hover:bg-green-50 transition-colors group">
+            <i class="ph-bold ${icon} text-2xl text-red-500"></i>
+            <div class="flex-1 min-w-0">
+                <p class="text-sm font-medium text-gray-700 group-hover:text-brand-green truncate">${escapeHtml(name)}</p>
+                <p class="text-xs text-gray-400">Click to view</p>
+            </div>
+            <i class="ph-bold ph-arrow-square-out text-gray-400 group-hover:text-brand-green"></i>
+        </a>
+    </div>`;
+}
+
+function renderCatalogThumbnail(url, fileType) {
+    const isImage = !fileType || isImageMime(fileType);
+    if (isImage) {
+        return `<div class="w-full h-40 overflow-hidden bg-gray-100">
+                   <img src="${url}" alt="" class="w-full h-full object-cover thread-image" loading="lazy"
+                        onerror="this.parentElement.innerHTML='<div class=\\'w-full h-full flex items-center justify-center text-gray-300\\'><i class=\\'ph-bold ph-image text-3xl\\'></i></div>'">
+               </div>`;
+    }
+    return `<div class="w-full h-40 bg-gray-100 flex items-center justify-center">
+                <i class="ph-bold ${getFileIcon(fileType, url)} text-4xl text-gray-300"></i>
+            </div>`;
+}
+
+function renderListThumbnail(url, fileType) {
+    const isImage = !fileType || isImageMime(fileType);
+    if (isImage) {
+        return `<div class="w-16 h-16 rounded-lg overflow-hidden bg-gray-100 shrink-0">
+                   <img src="${url}" alt="" class="w-full h-full object-cover" loading="lazy"
+                        onerror="this.parentElement.innerHTML='<div class=\\'w-full h-full flex items-center justify-center text-gray-300\\'><i class=\\'ph-bold ph-image\\'></i></div>'">
+               </div>`;
+    }
+    return `<div class="w-16 h-16 rounded-lg bg-gray-100 flex items-center justify-center shrink-0">
+                <i class="ph-bold ${getFileIcon(fileType, url)} text-2xl text-gray-300"></i>
+            </div>`;
+}
 
 function renderForumPagination(total) {
     const container = document.getElementById('forum-pagination');
